@@ -1,3 +1,5 @@
+package com.tavisca.workshops.pratham;
+
 import com.tavisca.workshops.pratham.MerchantGalaxy;
 import org.junit.Test;
 
@@ -13,7 +15,7 @@ public class RomanToArabicConvertorTest {
         RomanToArabicConverter rtac=new RomanToArabicConverter();
         assertEquals(4,rtac.romanToArabicConvertor("IV"));
     }
-    //@Test
+
 
 
         

@@ -1,3 +1,5 @@
+package com.tavisca.workshops.pratham;
+
 import java.util.HashMap;
 
 public class RomanToArabicConverter
@@ -14,6 +16,10 @@ public class RomanToArabicConverter
     }};
 
     public int romanToArabicConvertor(String roman) {
+
+        if(!isValid(roman)){
+            throw new RuntimeException("Invalid Roman Format");
+        }
         int out = 0;
         char lastchar = 'M';
         char[] a = roman.toCharArray();
@@ -21,16 +27,18 @@ public class RomanToArabicConverter
         for (char character : a)
         {
             out += romanToArabic.get(character);
-            System.out.println(out);
+
             if (romanToArabic.get(lastchar) < romanToArabic.get(character))
             {
                 out -= romanToArabic.get(lastchar) * 2;
             }
             lastchar = character;
-
-
         }
         return out;
+    }
+
+    private boolean isValid(String roman) {
+        return roman.matches("^(?=[MDCLXVI])M*(C[MD]|D?C{0,3})(X[CL]|L?X{0,3})(I[XV]|V?I{0,3})$");
     }
 
 }

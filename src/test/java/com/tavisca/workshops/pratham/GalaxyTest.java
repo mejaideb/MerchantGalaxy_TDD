@@ -1,5 +1,6 @@
 package com.tavisca.workshops.pratham;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -7,8 +8,7 @@ import static org.junit.Assert.assertEquals;
 
 
 public class GalaxyTest {
-
-
+    MerchantGalaxy merchantGalaxy = new MerchantGalaxy();
     @Test
     public void canParseWordToRomanNumeralStatement() {
         WordToRomanParser wordToRomanParser = new WordToRomanParser();
@@ -37,12 +37,48 @@ public class GalaxyTest {
     @Test
     public void checkValidMap() {
         try {
-            MerchantGalaxy merchantGalaxy = new MerchantGalaxy();
             merchantGalaxy.query("glob is I");
+            merchantGalaxy.query("prok is V");
+            merchantGalaxy.query("pish is X");
+            merchantGalaxy.query("tegj is L");
 
             assertEquals('I', merchantGalaxy.getRomanLiteralForWord("glob"));
+            assertEquals('V', merchantGalaxy.getRomanLiteralForWord("prok"));
+            assertEquals('X', merchantGalaxy.getRomanLiteralForWord("pish"));
+            assertEquals('L', merchantGalaxy.getRomanLiteralForWord("tegj"));
         } catch (Exception e) {
             return;
         }
+    }
+
+    @Test
+    public void checkCreditPerItem()throws Exception
+    {
+        checkValidMap();
+        //merchantGalaxy.query("glob is I");
+        merchantGalaxy.query("glob glob Silver is 34 Credits");
+        merchantGalaxy.query("glob prok Gold is 57800 Credits");
+       // merchantGalaxy.query("pish pish Iron is 3910 Credits");
+        assertEquals(17,merchantGalaxy.getValueForMetal("Silver"));
+        assertEquals(14450,merchantGalaxy.getValueForMetal("Gold"));
+        //assertEquals(195.5,merchantGalaxy.getValueForMetal("Iron"));
+    }
+
+    @Test
+    public void answerQuestions()throws Exception
+    {
+        checkValidMap();
+        //merchantGalaxy.query("glob glob Silver is 34 Credits");
+        checkCreditPerItem();
+        String response = merchantGalaxy.query("how much is pish tegj glob glob ?");
+        String response1 = merchantGalaxy.query("how many Credits is glob prok Silver ?");
+//        String response2 = merchantGalaxy.query("how many Credits is glob prok Gold ?");
+//        String response3 = merchantGalaxy.query("how many Credits is glob prok Gold ?");
+//        //String response4 = merchantGalaxy.query("how many Credits is glob prok Iron ?");
+
+        assertEquals("pish tegj glob glob is 42",response);
+        assertEquals("glob prok Silver is 68 Credits",response1);
+//        assertEquals("glob prok Gold is 57800 Credits",response3);
+//        //assertEquals("glob prok Iron is 782 Credits",response4);
     }
 }
