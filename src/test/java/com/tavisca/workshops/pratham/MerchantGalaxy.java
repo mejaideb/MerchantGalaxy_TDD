@@ -5,11 +5,11 @@ import java.util.HashMap;
 
 public class MerchantGalaxy {
 
-    public static final String RESPONSE_NO_IDEA = "I have no idea what you are talking about";
-    //    public int ConvertToNumeric(String s) {
-//        return romanToArebic.get(s);
-//
-//    }
+    private static final String RESPONSE_NO_IDEA = "I have no idea what you are talking about";
+
+    private HashMap<String, Character> validRoman = new HashMap<>();
+    private HashMap<String, Integer> metalToCreditsMap = new HashMap<>();
+
     private static HashMap<Character, Integer> romanToArabic = new HashMap<Character, Integer>() {{
         put('I', 1);
         put('V', 5);
@@ -20,8 +20,7 @@ public class MerchantGalaxy {
         put('M', 1000);
 
     }};
-    private HashMap<String, Character> validRoman = new HashMap<>();
-    private HashMap<String, Integer> metalToCreditsMap = new HashMap<>();
+
 
     public String query(String statement) throws Exception {
         if (statement.contains("?")) {
@@ -30,7 +29,7 @@ public class MerchantGalaxy {
             handleMetalsCreditValuePerItem(statement);
             return "";
         } else {
-            handleWordToRomanStatement(statement);
+            handleWordToRomanStatements(statement);
             return "";
         }
     }
@@ -39,25 +38,26 @@ public class MerchantGalaxy {
         StatementToCreditTokenParser stctp = new StatementToCreditTokenParser();
         String[] questions = stctp.canParseMuchManyTokens(statement);
 
-        if (statement.contains("much")) {
+        if (statement.contains("much") && statement.contains("is")) {
             return answerQuestionsForMuch(questions);
-        }
-        else if (statement.contains("many")) {
+        } else if (statement.contains("many")) {
             return answerQuestionsForMany(questions);
-        }else {
+        } else if (!statement.contains("is") || !statement.contains("Credits") || !statement.contains("credits")) {
             return RESPONSE_NO_IDEA;
+        } else {
+            return "";
         }
     }
 
     private String answerQuestionsForMany(String[] questions) {
         RomanToArabicConverter rtac = new RomanToArabicConverter();
         String roman = "";
-        String response="";
+        String response = "";
 
         int i;
         for (i = 0; i < questions.length - 1; i++) {
             roman += validRoman.get(questions[i]);
-            response+=questions[i]+ " ";
+            response += questions[i] + " ";
         }
         response += questions[i] + " ";
 
@@ -65,17 +65,14 @@ public class MerchantGalaxy {
         int valueOfMetal = metalToCreditsMap.get(questions[questions.length - 1]);
         int calculateResult = tokenValue * valueOfMetal;
 
-        response+="is "+calculateResult+ " " + "Credits";
+        response += "is " + calculateResult + " " + "Credits";
 
         return response;
-
-
     }
-
 
     private String answerQuestionsForMuch(String[] words) {
         RomanToArabicConverter rtac = new RomanToArabicConverter();
-        StatementToCreditTokenParser stctp=new StatementToCreditTokenParser();
+        StatementToCreditTokenParser stctp = new StatementToCreditTokenParser();
         String romanLiterals = "";
         String response = "";
         for (String word : words) {
@@ -85,7 +82,7 @@ public class MerchantGalaxy {
         }
 
         int result = rtac.romanToArabicConvertor(romanLiterals);
-        response += "is " + String.valueOf(result);
+        response += "is " + Integer.toString(result);
 
         return response;
     }
@@ -107,15 +104,15 @@ public class MerchantGalaxy {
 
     private int convertWordsToRomanAndRomanToArabicValue(String[] words) {
         RomanToArabicConverter rtac = new RomanToArabicConverter();
-        String s = "";
+        String roman = "";
         for (String word : words) {
-            s += validRoman.get(word);
+            roman += validRoman.get(word);
         }
-        return rtac.romanToArabicConvertor(s);
+        return rtac.romanToArabicConvertor(roman);
 
     }
 
-    private void handleWordToRomanStatement(String word) throws Exception {
+    private void handleWordToRomanStatements(String word) throws Exception {
         WordToRomanParser wtrp = new WordToRomanParser();
         String[] wordToRoman = wtrp.wordToRomanParse(word);
         if (isValidLiteral(wordToRoman[1]))
