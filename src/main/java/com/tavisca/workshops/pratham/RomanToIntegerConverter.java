@@ -2,9 +2,9 @@ package com.tavisca.workshops.pratham;
 
 import java.util.HashMap;
 
-public class RomanToArabicConverter
+public class RomanToIntegerConverter
 {
-    private HashMap<Character, Integer> romanToArabic = new HashMap<Character, Integer>() {{
+    public static HashMap<Character, Integer> romanLettersMap = new HashMap<Character, Integer>() {{
         put('I', 1);
         put('V', 5);
         put('X', 10);
@@ -15,7 +15,7 @@ public class RomanToArabicConverter
 
     }};
 
-    public int romanToArabicConvertor(String roman) {
+    public static int convert(String roman) {
 
         if(!isValid(roman)){
             throw new RuntimeException("Invalid Roman Format");
@@ -26,18 +26,18 @@ public class RomanToArabicConverter
 
         for (char character : a)
         {
-            out += romanToArabic.get(character);
+            out += romanLettersMap.get(character);
 
-            if (romanToArabic.get(lastchar) < romanToArabic.get(character))
+            if (romanLettersMap.get(lastchar) < romanLettersMap.get(character))
             {
-                out -= romanToArabic.get(lastchar) * 2;
+                out -= romanLettersMap.get(lastchar) * 2;
             }
             lastchar = character;
         }
         return out;
     }
 
-    private boolean isValid(String roman) {
+    private static boolean isValid(String roman) {
         return roman.matches("^(?=[MDCLXVI])M*(C[MD]|D?C{0,3})(X[CL]|L?X{0,3})(I[XV]|V?I{0,3})$");
     }
 

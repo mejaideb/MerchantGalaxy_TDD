@@ -1,6 +1,6 @@
 package com.tavisca.workshops.pratham;
 
-public class StatementToCreditTokenParser {
+public class CreditStatement {
 
     public String[] canParseCreditStatement(String inputs) {
         String words[] = inputs.split(" ");
@@ -26,19 +26,5 @@ public class StatementToCreditTokenParser {
     }
 
 
-    public String[] canParseMuchManyTokens(String s) {
-        String[] tokens = s.split(" ");
-        int indexOfIs = -1;
-        int indexOfQuestionMark = -1;
-        for (int i = 0; i < tokens.length; i++) {
-            if (tokens[i].equals("is"))
-                indexOfIs = i;
-            else if (tokens[i].equals("?"))
-                indexOfQuestionMark = i;
-        }
-        String[] wordsToken = new String[indexOfQuestionMark - indexOfIs - 1];
-        for (int j = 0; j < wordsToken.length; j++)
-            wordsToken[j] = tokens[j + indexOfIs + 1];
-        return wordsToken;
-    }
+
 }
